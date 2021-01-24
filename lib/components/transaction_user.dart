@@ -6,7 +6,7 @@ import 'package:expenses/models/transation.dart';
 import 'package:flutter/material.dart';
 
 class TransactionUser extends StatefulWidget {
-  TransactionUser({Key key}) : super(key: key);
+  // TransactionUser({Key key}) : super(key: key);
 
   @override
   _TransactionUserState createState() => _TransactionUserState();
@@ -43,8 +43,8 @@ class _TransactionUserState extends State<TransactionUser> {
     return Container(
       child: Column(
         children: <Widget>[
+          TransationForm(_addTransaction),
           TransactionList(_transation),
-          TransationForm(),
         ],
       ),
     );
