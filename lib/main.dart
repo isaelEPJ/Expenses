@@ -10,7 +10,14 @@ main() => runApp(ExpensesApp());
 class ExpensesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: MyHomePage());
+    return MaterialApp(
+      home: MyHomePage(),
+      theme: ThemeData(
+        primarySwatch: Colors.purple,
+        accentColor: Colors.amber,
+        fontFamily: 'Quicksand',
+      ),
+    );
   }
 }
 
@@ -20,17 +27,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final _transation = [
-    Transation(
-        id: 't1',
-        title: 'Transaçao de teste',
-        value: 798.01,
-        date: DateTime.now()),
-    Transation(
-        id: 't2',
-        title: 'Transaçao numero dois',
-        value: 347.87,
-        date: DateTime.now())
+  final List<Transation> _transation = [
+    // Transation(
+    //     id: 't1',
+    //     title: 'Transaçao de teste',
+    //     value: 798.01,
+    //     date: DateTime.now()),
+    // Transation(
+    //     id: 't2',
+    //     title: 'Transaçao numero dois',
+    //     value: 347.87,
+    //     date: DateTime.now())
   ];
 
   _addTransaction(String title, double value) {

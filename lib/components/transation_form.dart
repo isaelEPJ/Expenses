@@ -48,7 +48,7 @@ class _TransationFormState extends State<TransationForm> {
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(6)),
               child: Text('Nova Transaçao'),
-              color: Colors.purple[400],
+              color: Theme.of(context).primaryColor,
               textColor: Colors.white,
               onPressed: _submitForm,
             ),
