@@ -28,29 +28,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Transation> _transation = [
-    Transation(
-        id: 't0',
-        title: 'Transaçao de teste',
-        value: 798.01,
-        date: DateTime.now().subtract(
-          Duration(days: 33),
-        )),
-    Transation(
-        id: 't1',
-        title: 'Transaçao de teste',
-        value: 798.01,
-        date: DateTime.now().subtract(
-          Duration(days: 3),
-        )),
-    Transation(
-        id: 't2',
-        title: 'Transaçao numero dois',
-        value: 347.87,
-        date: DateTime.now().subtract(
-          Duration(days: 5),
-        ))
-  ];
+  final List<Transation> _transation = [];
 
   List<Transation> get _recentTransactions {
     return _transation.where((tr) {
@@ -60,17 +38,23 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
-  _addTransaction(String title, double value) {
+  _addTransaction(String title, double value, DateTime date) {
     final newTransaction = Transation(
       id: Random().nextDouble().toString(),
       title: title,
       value: value,
-      date: DateTime.now(),
+      date: date,
     );
     setState(() {
       _transation.add(newTransaction);
     });
     Navigator.of(context).pop();
+  }
+
+  _removeTransition(String id) {
+    setState(() {
+      _transation.removeWhere((tr) => tr.id == id);
+    });
   }
 
   _openTransactionFormModal(BuildContext context) {
@@ -100,7 +84,7 @@ class _MyHomePageState extends State<MyHomePage> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
             Chart(_recentTransactions),
-            TransactionList(_transation),
+            TransactionList(_transation, _removeTransition),
           ],
         ),
       ),

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class TransationForm extends StatefulWidget {
-  final void Function(String, double) onSubmit;
+  final void Function(String, double, DateTime) onSubmit;
 
   TransationForm(this.onSubmit);
 
@@ -11,19 +12,19 @@ class TransationForm extends StatefulWidget {
 
 class _TransationFormState extends State<TransationForm> {
   final titleControler = TextEditingController();
-
   final valueController = TextEditingController();
+  DateTime _selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
     _submitForm() {
       final title = titleControler.text;
       final value = double.tryParse(valueController.text) ?? 0;
-      if (title.isEmpty || value <= 0) {
+      if (title.isEmpty || value <= 0 || _selectedDate == null) {
         return;
       }
 
-      widget.onSubmit(title, value);
+      widget.onSubmit(title, value, _selectedDate);
     }
 
     return Container(
@@ -35,6 +36,7 @@ class _TransationFormState extends State<TransationForm> {
               // onChanged: (newTitle) => title = newTitle,
               decoration: InputDecoration(labelText: 'Título'),
               onSubmitted: (_) => _submitForm(),
+              textInputAction: TextInputAction.next,
             ),
             TextField(
               controller: valueController,
@@ -42,6 +44,28 @@ class _TransationFormState extends State<TransationForm> {
               onSubmitted: (_) => _submitForm(),
               decoration: InputDecoration(
                 labelText: 'Valor (R\$)',
+              ),
+            ),
+            Container(
+              height: 70,
+              child: Row(
+                children: <Widget>[
+                  Text(_selectedDate == null
+                      ? 'Nenhuma data selecionada!'
+                      : 'Data Selecionada: ${DateFormat('dd/MM/y').format(_selectedDate)}. '),
+                  FlatButton(
+                    padding: EdgeInsets.fromLTRB(5, 10, 10, 10),
+                    textColor: Theme.of(context).primaryColor,
+                    color: Colors.white,
+                    child: Text(
+                      'Selecionar Data',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    onPressed: () {},
+                  ),
+                ],
               ),
             ),
             FlatButton(
