@@ -1,16 +1,19 @@
 import 'dart:math';
-
 import 'package:expenses/components/chart.dart';
 import 'package:expenses/components/transation_form.dart';
 import 'package:expenses/components/transaction_list.dart';
 import 'package:expenses/models/transation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 main() => runApp(ExpensesApp());
 
 class ExpensesApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations(
+      [DeviceOrientation.portraitUp],
+    );
     return MaterialApp(
       home: MyHomePage(),
       theme: ThemeData(
@@ -29,6 +32,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transation> _transation = [];
+  bool _showChart = false;
 
   List<Transation> get _recentTransactions {
     return _transation.where((tr) {
@@ -68,23 +72,52 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Despesas Pessoais'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () => _openTransactionFormModal(context),
-          ),
-        ],
+    final appBar = AppBar(
+      title: Text(
+        'Despesas Pessoais',
+        style: TextStyle(fontSize: 10 * MediaQuery.of(context).textScaleFactor),
       ),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () => _openTransactionFormModal(context),
+        ),
+      ],
+    );
+    final availableHeight = MediaQuery.of(context).size.height -
+        appBar.preferredSize.height -
+        MediaQuery.of(context).padding.top;
+
+    return Scaffold(
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           mainAxisSize: MainAxisSize.max,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            Chart(_recentTransactions),
-            TransactionList(_transation, _removeTransition),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Mostrar gráfico'),
+                Switch(
+                  value: _showChart,
+                  onChanged: (value) {
+                    setState(() {
+                      _showChart = value;
+                    });
+                  },
+                )
+              ],
+            ),
+            _showChart
+                ? Container(
+                    height: availableHeight * 0.3,
+                    child: Chart(_recentTransactions),
+                  )
+                : Container(
+                    height: availableHeight * 0.7,
+                    child: TransactionList(_transation, _removeTransition),
+                  ),
           ],
         ),
       ),
