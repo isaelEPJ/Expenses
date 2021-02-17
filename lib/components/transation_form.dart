@@ -1,3 +1,6 @@
+import 'package:expenses/components/adaptativeButtom.dart';
+import 'package:expenses/components/adaptativeDatePicker.dart';
+import 'package:expenses/components/adaptativeTextField.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -31,20 +34,18 @@ class _TransationFormState extends State<TransationForm> {
       child: Card(
         child: Column(
           children: <Widget>[
-            TextField(
-              controller: titleControler,
-              // onChanged: (newTitle) => title = newTitle,
-              decoration: InputDecoration(labelText: 'Título'),
-              onSubmitted: (_) => _submitForm(),
+            adaptativeTextField(
+              isController: titleControler,
+              labelText: 'Titulo',
+              onSubmited: (_) => _submitForm(),
               textInputAction: TextInputAction.next,
             ),
-            TextField(
-              controller: valueController,
+            adaptativeTextField(
+              isController: valueController,
               keyboardType: TextInputType.numberWithOptions(decimal: true),
-              onSubmitted: (_) => _submitForm(),
-              decoration: InputDecoration(
-                labelText: 'Valor (R\$)',
-              ),
+              onSubmited: (_) => _submitForm(),
+              labelText: 'Valor (R\$)',
+              textInputAction: TextInputAction.next,
             ),
             Container(
               height: 70,
@@ -53,29 +54,18 @@ class _TransationFormState extends State<TransationForm> {
                   Text(_selectedDate == null
                       ? 'Nenhuma data selecionada!'
                       : 'Data Selecionada: ${DateFormat('dd/MM/y').format(_selectedDate)}. '),
-                  FlatButton(
-                    padding: EdgeInsets.fromLTRB(5, 10, 10, 10),
-                    textColor: Theme.of(context).primaryColor,
-                    color: Colors.white,
-                    child: Text(
-                      'Selecionar Data',
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    onPressed: () {},
+                  adaptativeDatePicker(
+                    selectedDate: _selectedDate,
+                    onDateChange: (newDate) {
+                      setState(() {
+                        _selectedDate = newDate;
+                      });
+                    },
                   ),
                 ],
               ),
             ),
-            FlatButton(
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6)),
-              child: Text('Nova Transaçao'),
-              color: Theme.of(context).primaryColor,
-              textColor: Colors.white,
-              onPressed: _submitForm,
-            ),
+            adaptativeButtom(label: 'Nova Transaçao', onPressed: _submitForm),
           ],
         ),
       ),
